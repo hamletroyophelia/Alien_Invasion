@@ -20,7 +20,7 @@ Alien Invasion是我在学习Python过程中的第一个项目。在这个项目
 
 1. 克隆这个仓库到本地
 ```bash
-git clone https://github.com/your_username/python_project_1_Alien_Invasion.git
+https://github.com/hamletroyophelia/python_project_1_Alien_Invasion.git
 ```
 
 2. 运行主程序
@@ -39,4 +39,4 @@ python alien_invasion.py
 
 ```
 
-以上是一个基础的README.md文件模板，你可以根据自己的需要进行修改和添加内容。
+
