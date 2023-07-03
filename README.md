@@ -1,6 +1,3 @@
-你可以创建一个README.md文件来介绍你的项目，提供安装和使用指南，并可能包括贡献规则，项目许可等。以下是一个基本的模板你可以使用或修改以满足你的需求：
-
-```markdown
 # Alien Invasion Game
 
 Alien Invasion是我在学习Python过程中的第一个项目。在这个项目中，我用Pygame包来开发一个2D游戏，玩家需要操作一艘飞船并射击从天而降的外星人。
@@ -23,20 +20,21 @@ Alien Invasion是我在学习Python过程中的第一个项目。在这个项目
 https://github.com/hamletroyophelia/python_project_1_Alien_Invasion.git
 ```
 
-2. 运行主程序
+1. 运行主程序
 ```bash
 python alien_invasion.py
 ```
 
 ## 游戏操作
-
+- 按p键或点击play按钮开始游戏;按q键或点击窗口关闭按钮推出游戏
 - 使用箭头键移动飞船
 - 使用空格键射击
+
 
 ## 许可
 
 这个项目根据MIT许可证授权。详情见[LICENSE](LICENSE)文件。
 
-```
+
 
 
