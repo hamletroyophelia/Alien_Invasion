@@ -58,6 +58,9 @@ class AlienInvasion:
         # 响应键盘和鼠标事件.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                #退出前将最高分写入文件保存
+                with open('high_score.txt', 'w') as file_object:
+                    file_object.write(str(self.stats.high_score))
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
@@ -76,6 +79,9 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            # 退出前将最高分写入文件保存
+            with open('high_score.txt', 'w') as file_object:
+                file_object.write(str(self.stats.high_score))
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -96,13 +102,13 @@ class AlienInvasion:
 
     def _start_game(self):
         # 重置游戏动态设置并更新游戏统计信息.
+        #设置
         self.settings.initialize_dynamic_settings()
-
+        #统计
         self.stats.reset_stats()
         self.stats.game_active = True
-        self.sb.prep_score()
-        self.sb.prep_level()
-        self.sb.prep_ships()
+        #更新信息图像
+        self.sb.prep_images()
         # 清空余下的外星人和子弹
         self.aliens.empty()
         self.bullets.empty()
@@ -139,14 +145,18 @@ class AlienInvasion:
             #整群外星人被消灭后,加快游戏节奏
             self.settings.increase_speed()
             #提高等级
-            self.stats.level += 1
-            self.sb.prep_level()
+            self.start_new_level()
         #积分
         if collisions:
             for _ in collisions.values():
                 self.stats.score += self.settings.alien_points
                 self.sb.prep_score()
                 self.sb.check_high_score()
+
+    def start_new_level(self):
+        """更新等级信息"""
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _update_aliens(self):
         """检查是否有外星人位于屏幕边缘并更新外星人群中所有外星人的位置"""

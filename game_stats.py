@@ -4,7 +4,9 @@ class GameStats:
     def __init__(self, ai_game):
         """初始化统计信息."""
         self.score = None
-        self.high_score = 0
+        #读取文件获得最高分,在__init__定义防止被重置
+        with open('high_score.txt') as file_object:
+            self.high_score = int(file_object.read())
         self.level = None
         self.ships_left = None
         self.settings = ai_game.settings

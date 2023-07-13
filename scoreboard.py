@@ -24,6 +24,10 @@ class Scoreboard:
         self.text_color = (110, 235, 110)
         self.font = pygame.font.SysFont(None, 40)
         # 准备初始当前得分,最高得分和等级图像
+        self.prep_images()
+
+    def prep_images(self):
+        """绘制游戏数据图像信息"""
         self.prep_score()
         self.prep_high_score()
         self.prep_level()
@@ -75,7 +79,7 @@ class Scoreboard:
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
-        self.ships.draw(self.screen )
+        self.ships.draw(self.screen)
 
     def check_high_score(self):
         """检查是否诞生了新的最高分"""
