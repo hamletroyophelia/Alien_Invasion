@@ -17,7 +17,7 @@ Alien Invasion是我在学习Python过程中的第一个项目。在这个项目
 
 1. 克隆这个仓库到本地
 ```bash
-https://github.com/hamletroyophelia/python_project_1_Alien_Invasion.git
+https://github.com/hamletroyophelia/Alien_Invasion.git
 ```
 
 1. 运行主程序
