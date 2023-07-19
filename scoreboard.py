@@ -3,6 +3,7 @@ from pygame.sprite import Group
 
 from ship import Ship
 
+
 class Scoreboard:
     """显示得分信息的类"""
 
@@ -69,13 +70,16 @@ class Scoreboard:
         """显示余下的飞船数"""
         self.ships = Group()
         for ship_number in range(self.stats.ships_left):
+            #用生命值图片替换原来的飞船图片
+            new_ship_image = pygame.image.load('images/heart.bmp')
             ship = Ship(self.ai_game)
+            ship.image = new_ship_image
             ship.rect.x = 10 + ship_number * ship.rect.width
             ship.rect.y = 10
             self.ships.add(ship)
 
     def show_score(self):
-        """在屏幕上显示数据信息:得分,等级和生命"""
+        """在屏幕上显示数据信息:得分,等级,生命"""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)

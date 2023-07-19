@@ -1,16 +1,18 @@
 # 导入外部标准模块
 import sys
-import pygame
 from time import sleep
 
+import pygame
+
 # 导入类
-from settings import Settings
-from game_stats import GameStats
-from button import Button
-from ship import Ship
-from bullet import Bullet
 from alien import Alien
+from bullet import Bullet
+from button import Button
+from game_stats import GameStats
 from scoreboard import Scoreboard
+from settings import Settings
+from ship import Ship
+from music import Music
 
 
 class AlienInvasion:
@@ -22,9 +24,20 @@ class AlienInvasion:
         pygame.init()
         # 创建Settings实例,并调用属性来创建屏幕
         self.settings = Settings()
-
+        # 加载背景图片
+        self.background_image = pygame.image.load("images/background.png")
+        # 缩放背景图片以适应屏幕大小
+        self.background_image = pygame.transform.scale(self.background_image,
+                                                       (self.settings.screen_width, self.settings.screen_height))
+        # 创建表示背景的Rect对象
+        self.background_rect = self.background_image.get_rect()
+        # 初始时，背景图片的y坐标为0
+        self.background_y = 0
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
+
+        #创建音乐
+        self.music = Music()  # 创建Music对象
 
         # 创建一个用于存储游戏统计信息的实例
         #并创建记分牌
@@ -41,7 +54,11 @@ class AlienInvasion:
         # 创建play按钮
         self.play_button = Button(self, "Play")
 
+        #创建一个Clock对象用于控制帧率
+        self.clock = pygame.time.Clock()
+
     def run_game(self):
+        self.music.play_background_music(-1)  # 循环播放背景音乐
         """开始游戏的主循环"""
         while True:
             self._check_events()
@@ -50,7 +67,6 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
-
             # 每次循环时都重绘屏幕.
             self._update_screen()
 
@@ -85,6 +101,9 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_ESCAPE:
+            self.toggle_pause()
+
 
     def _check_keyup_events(self, event):
         """响应松开按键."""
@@ -117,6 +136,13 @@ class AlienInvasion:
         self.ship.center_ship()
         # 隐藏鼠标光标.
         pygame.mouse.set_visible(False)
+
+    def toggle_pause(self):
+        self.stats.game_active = not self.stats.game_active
+        if not self.stats.game_active:
+            pygame.mixer.pause()  # 暂停背景音乐
+        else:
+            pygame.mixer.unpause()  # 恢复背景音乐
 
     def _fire_bullet(self):
         """创建新子弹,并将其加入编组bullets"""
@@ -152,6 +178,7 @@ class AlienInvasion:
                 self.stats.score += self.settings.alien_points
                 self.sb.prep_score()
                 self.sb.check_high_score()
+                self.music.play_shoot_sound()
 
     def start_new_level(self):
         """更新等级信息"""
@@ -241,22 +268,39 @@ class AlienInvasion:
                 break
 
     def _update_screen(self):
-        # 更新屏幕图像,并切换到新屏幕.
-        self.screen.fill(self.settings.bg_color)
+        """更新屏幕上的图像，并切换到新屏幕"""
+        # 让背景图滚动
+        self.background_y += 1
+        if self.background_y >= self.settings.screen_height:
+            self.background_y = 0
+
+        # 绘制背景图
+        self.screen.blit(self.background_image, (0, self.background_y))
+        self.screen.blit(self.background_image, (0, self.background_y - self.settings.screen_height))
+
+        # 绘制飞船
         self.ship.blitme()
-        #绘制子弹
+
+        # 绘制子弹
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        # 让外星人出现在屏幕上
+
+        # 绘制外星人
         self.aliens.draw(self.screen)
-        #显示得分和等级
+
+        # 绘制得分
         self.sb.show_score()
 
-        # 如果游戏处于非活跃状态,就绘制play按钮
+        # 如果游戏处于非活动状态，绘制Play按钮
         if not self.stats.game_active:
             self.play_button.draw_button()
+
+        # 控制帧率
+        self.clock.tick(60)  # 这里的60表示帧率上限为60fps
+
         # 让最近绘制的屏幕可见
         pygame.display.flip()
+
 
 
 if __name__ == '__main__':
